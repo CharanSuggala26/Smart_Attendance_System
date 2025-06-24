@@ -18,7 +18,6 @@ with open('data/faces_data.pkl', 'rb') as f:
 with open('data/names.pkl', 'rb') as w:
     LABELS = pickle.load(w)
 
-# Equalize samples
 min_samples = min(len(FACES), len(LABELS))
 FACES = np.array(FACES[:min_samples])
 LABELS = np.array(LABELS[:min_samples])
@@ -29,7 +28,6 @@ print(f'Shape of Faces matrix: {FACES.shape} | Labels count: {len(LABELS)}')
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(FACES, LABELS)
 
-# Load background image
 imgBackground = cv2.imread("background.png")
 
 # Setup webcam
@@ -43,7 +41,6 @@ while True:
     if not ret:
         continue
 
-    # Resize frame to fit background space
     frame_resized = cv2.resize(frame, (640, 421))
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
