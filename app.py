@@ -214,19 +214,10 @@ with tab2:
             else:
                 st.warning("⚠️ Please enter a valid name before registering.")
 
-# -----------------------------------------------
-# TAB 3 - Attendance Logs
-# -----------------------------------------------
-# -----------------------------------------------
-# TAB 3 - Attendance Logs
-# -----------------------------------------------
-# -----------------------------------------------
-# TAB 3 - Attendance Logs
-# -----------------------------------------------
+#TAB3
 with tab3:
     st.header("📊 Attendance Logs Viewer")
 
-    # Custom CSS for dark table
     st.markdown("""
     <style>
         .stDataFrame div[data-testid="stDataFrameContainer"] {
@@ -250,11 +241,11 @@ with tab3:
     </style>
     """, unsafe_allow_html=True)
 
-    # Load today's file
+    # Loading today's Attendance files
     date_today = datetime.today().strftime('%d-%m-%Y')
     csv_path = f"Attendance/Attendance_{date_today}.csv"
 
-    # Filters
+    # Filters on the data by name,date
     col1, col2, col3 = st.columns([3, 2, 2])
     with col1:
         name_filter = st.text_input("🔍 Search by name")
@@ -273,31 +264,31 @@ with tab3:
                 st.warning("⚠️ No data for selected date.")
                 st.stop()
 
-    # Load filtered CSV
+    # Loading the filtered CSV Attendance files 
+    # after applyinh the filters
     if os.path.exists(csv_path):
         df = pd.read_csv(csv_path)
     else:
         st.warning("⚠️ No attendance data found!")
         st.stop()
 
-    # Name filtering
     if name_filter:
         df = df[df["NAME"].str.contains(name_filter, case=False)]
 
-    # Show table with dark theme
+    # Showing the table
     st.dataframe(df.style.set_properties(**{
         'background-color': '#000000',
         'color': 'white',
         'border-color': '#444'
     }), use_container_width=True)
 
-    # Download button
+    # Download the csv file
     csv = df.to_csv(index=False).encode('utf-8')
     st.download_button("⬇️ Download CSV", data=csv, file_name="attendance_filtered.csv", mime='text/csv')
 
-    # Visualization Section
+    # Visualization part of the Attendance Logs
     if not df.empty:
-        # Create tabs for different chart types
+        # 2 tabs(i.e bar chart and line chart)
         chart_tab1, chart_tab2 = st.tabs(["📊 Bar Chart", "📈 Line Chart"])
         
         with chart_tab1:
@@ -315,12 +306,12 @@ with tab3:
         with chart_tab2:
             st.subheader("Attendance Over Time")
             
-            # Convert TIME column to datetime and extract hour
+            # Converting TIME column to datetime and extract hour
             try:
                 df['TIME'] = pd.to_datetime(df['TIME'], errors='coerce')
                 df['Hour'] = df['TIME'].dt.hour
                 
-                # Create line chart
+                # Creating line chart
                 fig_line = px.line(df.groupby('Hour').size().reset_index(name='Count'),
                                  x='Hour', y='Count',
                                  title='Attendance by Hour of Day',
