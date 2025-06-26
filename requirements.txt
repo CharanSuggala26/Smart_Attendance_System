@@ -1,0 +1,7 @@
+streamlit
+opencv-python
+numpy
+scikit-learn
+pandas
+plotly
+pywin32 ; sys_platform == "win32"
