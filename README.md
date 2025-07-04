@@ -1,1 +1,1 @@
-# face_recognition_project
+# Smart Attendance System using OpenCv

@@ -12,7 +12,6 @@ def speak(str1):
     speak = Dispatch("SAPI.SpVoice")
     speak.Speak(str1)
 
-# Load data
 with open('data/faces_data.pkl', 'rb') as f:
     FACES = pickle.load(f)
 with open('data/names.pkl', 'rb') as w:
@@ -24,13 +23,13 @@ LABELS = np.array(LABELS[:min_samples])
 
 print(f'Shape of Faces matrix: {FACES.shape} | Labels count: {len(LABELS)}')
 
-# Train model
+# Training model with KNN
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(FACES, LABELS)
 
 imgBackground = cv2.imread("background.png")
 
-# Setup webcam
+# Configurating webcam for face detection
 video = cv2.VideoCapture(0)
 facedetect = cv2.CascadeClassifier('data/haarcascade_frontalface_default.xml')
 
@@ -58,10 +57,9 @@ while True:
         timestamp = datetime.fromtimestamp(ts).strftime("%H:%M-%S")
         exist = os.path.isfile(f"Attendance/Attendance_{date}.csv")
 
-        # Draw bounding box
+        
         cv2.rectangle(frame_resized, (x, y), (x+w, y+h), (50, 50, 255), 2)
 
-        # Draw label ABOVE if enough space, else BELOW
         text = str(output[0])
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.9
@@ -73,7 +71,7 @@ while True:
 
         attendance = [text, timestamp]
 
-    # Insert frame into background
+    # Frame+Background Intersection(i.e merging into background image)
     imgBackground_copy = imgBackground.copy()
     imgBackground_copy[162:162 + 421, 55:55 + 640] = frame_resized
 
