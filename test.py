@@ -29,7 +29,7 @@ knn.fit(FACES, LABELS)
 
 imgBackground = cv2.imread("background.png")
 
-# Configurating webcam for face detection
+# Configurating webcam for face detection during attendance
 video = cv2.VideoCapture(0)
 facedetect = cv2.CascadeClassifier('data/haarcascade_frontalface_default.xml')
 
